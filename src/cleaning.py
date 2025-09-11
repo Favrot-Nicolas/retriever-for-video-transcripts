@@ -1,7 +1,4 @@
 import re
-from pathlib import Path
-
-from langchain_core.documents import Document
 
 TIMESTAMP_RE = re.compile(r"^\s*\d{2}:\d{2}:\d{2}(?:[.,]\d{3})?\s*")
 URL_RE = re.compile(r"^#?\s*https?://\S+")
@@ -52,25 +49,3 @@ def clean_transcript_and_extract_url(text: str) -> tuple[str, str | None]:
     merged = " ".join(cleaned_lines)
     merged = re.sub(r"\s+", " ", merged).strip()
     return merged, url
-
-def load_txt_folder_as_documents(folder: str | Path) -> list[Document]:
-    """Load transcript text files from a folder, clean them, 
-    and return as list of langchain Documents.
-
-    Args:
-        folder (str | Path): Path to folder with .txt files
-
-    Returns:
-        list[Document]: List of cleaned Documents with metadata
-    """
-    folder = Path(folder)
-    docs: list[Document] = []
-    for path in sorted(folder.glob("*.txt")):
-        raw = path.read_text(encoding="utf-8", errors="ignore")
-        cleaned, url = clean_transcript_and_extract_url(raw)
-        if cleaned:
-            metadata = {"source": path.name, "path": str(path)}
-            if url:
-                metadata["url"] = url
-            docs.append(Document(page_content=cleaned, metadata=metadata))
-    return docs
