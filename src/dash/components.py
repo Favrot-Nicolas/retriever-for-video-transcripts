@@ -44,7 +44,7 @@ introduction_card = dbc.Card(
     [
         dbc.CardBody(
             [
-                html.H4("Video Transcript Retriever", className="card-title"),
+                html.H4("Video Transcript Retriever du Fraik", className="card-title"),
                 html.P(
                     "A tool to fetch, store, and retrieve video transcripts using LLMs.",
                     className="card-text",
